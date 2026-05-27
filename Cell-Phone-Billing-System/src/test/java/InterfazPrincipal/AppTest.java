@@ -1,4 +1,4 @@
-package App;
+package InterfazPrincipal;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
