@@ -1,13 +1,12 @@
 package InterfazPrincipal.InterfazEjecucion;
 
-import java.io.Serializable;
 import java.util.Scanner;
 
 /**
  * Hello world!
  *
  */
-public class TestConsola implements Serializable {
+public class TestConsola{
     public static void main(String[] args){
         Scanner entrada = new Scanner(System.in);
         System.out.println("Ingrese la opción que se quiere implementar");
@@ -22,6 +21,7 @@ public class TestConsola implements Serializable {
                 "9. Salir" +
                 "Opción: ");
         int opcion = entrada.nextInt();
+        entrada.nextLine();
         Boolean salirAMenu = false;
         Boolean retorno = false;
         IEmpresa miEmpresa = new Empresa();
@@ -39,8 +39,9 @@ public class TestConsola implements Serializable {
 
                         //Podemos hacer la implementación de una excepción aquí
                         if (subOpcion == 1) {
-                            //Hacemos la lecura de los datos desde una función imlementada abajo
+                            //Hacemos la lecura de los datos desde una función implementada abajo
                             System.out.println("Procesando archivo...");
+
                             lecturaDatos(entrada, miEmpresa);
                         } else if (subOpcion == 9) {
                             retorno = true;
@@ -48,9 +49,13 @@ public class TestConsola implements Serializable {
                     }while (!retorno);
                     break;
                 case 2:
-                        System.out.println("---AGREGAR NUEVA CUENTA PREPAGO O POSTPAGO---");
+                    System.out.println("---AGREGAR NUEVA CUENTA PREPAGO O POSTPAGO---");
+                    System.out.println("Ingrese su cuenta: \n\t1. Prepago \n\t 2. Postpago \n\tOpción: ");
+                    String tipoCuenta = entrada.nextLine();
+                    if(tipoCuenta.equals("1")){
 
-                        break;
+                    }
+                    break;
                 case 3:
                     System.out.println("---AGREGAR NUEVA LLAMADA NACIONAL O INTERNACIONAL---");
                     break;
@@ -88,9 +93,13 @@ public class TestConsola implements Serializable {
         System.out.println("Ingrese el nombre del archivo donde quiere hacer la lectura: ");
         String archivoLectura = new String();
         archivoLectura = entrada.nextLine();
-
+        //Lectura de clientes
+        miEmpresa.lecturaClientes(archivoLectura);
     }
 
     //Creación de una cuenta prepago o postpago
-    public static void creacionCuenta(Scanner entada, )
+    public static void busquedaCliente(Scanner entrada, IEmpresa miEmpresa){
+        System.out.println("Ingrese el nombe del cliente");
+        String nombreCliente = entrada.nextLine();
+    }
 }

@@ -9,6 +9,12 @@ public class Cliente {
 
     /*Constructores*/
 
+    public Cliente(String nombre, String identificacion, String direccion){
+        this.nombre = nombre;
+        this.identificacion = identificacion;
+        this.direccion = direccion;
+    }
+
     public Cliente(String direccion, String identificacion, String nombre, String tipoId, Cuenta cuentaCliente) {
         this.direccion = direccion;
         this.identificacion = identificacion;
