@@ -11,7 +11,7 @@ import java.util.Scanner;
 public interface IEmpresa {
     ArrayList getClientes();
 
-    ArrayList<Cliente> lecturaClientes(String nombreArchivo);
-    ArrayList<Cliente> agregarCuenta(Scanner entrada, String nombreCliente, long numeroTelefono);
+    void lecturaClientes(String nombreArchivo);
+    void agregarCuenta(Scanner entrada, String nombreCliente, long numeroTelefono);
 
 }

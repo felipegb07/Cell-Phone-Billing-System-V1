@@ -1,5 +1,8 @@
 package InterfazPrincipal.InterfazEjecucion;
 
+import InterfazPrincipal.ENUMS.Paises;
+import InterfazPrincipal.Excepciones.PaisNoEncontradoException;
+
 import java.util.Scanner;
 
 /**
@@ -9,25 +12,27 @@ import java.util.Scanner;
 public class TestConsola{
     public static void main(String[] args){
         Scanner entrada = new Scanner(System.in);
-        System.out.println("Ingrese la opción que se quiere implementar");
-        System.out.println("1. Ingresar clientes.\n" +
-                "2. Agregar nueva cuenta prepago o postapago.\n" +
-                "3. Agregar una nueva llamada nacional o internacional\n" +
-                "4. Agregar una recarga\n" +
-                "5. Reporte de facturación postpago a fin de mes.\n" +
-                "6. Reporte de recargas a fin de mes.\n" +
-                "7. Guardar la empresa en un archivo como un objeto\n" +
-                "8. Cargar un archivo en el objeto empresa\n" +
-                "9. Salir" +
-                "Opción: ");
-        int opcion = entrada.nextInt();
-        entrada.nextLine();
         Boolean salirAMenu = false;
-        Boolean retorno = false;
-        IEmpresa miEmpresa = new Empresa();
-        entrada.nextLine();
-
+        Utils modDeUtilidades = new Utils();
         do {
+            System.out.println("Ingrese la opción que se quiere implementar");
+            System.out.println("1. Ingresar clientes.\n" +
+                    "2. Agregar nueva cuenta prepago o postapago.\n" +
+                    "3. Agregar una nueva llamada nacional o internacional\n" +
+                    "4. Agregar una recarga\n" +
+                    "5. Reporte de facturación postpago a fin de mes.\n" +
+                    "6. Reporte de recargas a fin de mes.\n" +
+                    "7. Guardar la empresa en un archivo como un objeto\n" +
+                    "8. Cargar un archivo en el objeto empresa\n" +
+                    "9. Salir" +
+                    "Opción: ");
+            int opcion = entrada.nextInt();
+            entrada.nextLine();
+            Boolean retorno = false;
+            IEmpresa miEmpresa = new Empresa();
+            entrada.nextLine();
+
+
             switch (opcion) {
                 case 1:
                     do {
@@ -61,6 +66,7 @@ public class TestConsola{
 
                 case 4:
                     System.out.println("---AGREGAR UNA RECARGA---");
+
                     break;
 
                 case 5:
@@ -105,6 +111,35 @@ public class TestConsola{
         miEmpresa.agregarCuenta(entrada, nombreCliente, numeroTelefono);
     }
 
+    public static void registrarLlamada(Scanner entrada, IEmpresa miEmpresa, Utils modDeUtilidades){
+        System.out.println("Ingrese su numero de telefono: ");
+        long numero = entrada.nextInt();
+        entrada.nextLine(); //Limpiar buffer
+
+        System.out.println("Ingrese el tipo de llamada \n\t1. Nacional\n\t2. Internacional");
+        Integer tipo = entrada.nextInt();
+        while(!tipo.equals(1) && !tipo.equals(2)){
+            System.out.println("Ingrese el tipo de llamada \n\t1. Nacional\n\t2. Internacional");
+            tipo = entrada.nextInt();
+        }
+
+        if(tipo.equals(2)){
+            System.out.println("---LLAMADA INTERNACIONAL---");
+            System.out.println("Ingrese el nombre del pais de destino");
+            try {
+                String nombre = entrada.nextLine();
+                modDeUtilidades.buscarPais(nombre);
+            } catch (PaisNoEncontradoException e){
+                System.out.println(e.getMessage());
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+
+        if(tipo.equals(1)){
+            System.out.println("---LLAMADA NACIONAL---");
+        }
+    }
+
     //Registro de una llamada
-    public static void
 }

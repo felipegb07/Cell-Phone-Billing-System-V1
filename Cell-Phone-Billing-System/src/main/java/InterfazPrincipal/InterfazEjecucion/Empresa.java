@@ -34,7 +34,7 @@ public class Empresa implements IEmpresa {
 
     //Metodo para poder hacer la lectura de los archivos
     @Override
-    public ArrayList<Cliente> lecturaClientes(String nombreArchivo) {
+    public void lecturaClientes(String nombreArchivo) {
         //Lectura de las primeras dos líneas del archivo de texto las cuales no presentan ninguna útilidad
         //El hash lo uso para sacar repetidos de una vez
         HashSet<Cliente> hashClientes = new HashSet<>();
@@ -83,14 +83,11 @@ public class Empresa implements IEmpresa {
                 }
             }
         }
-
-        //De igual manera si no hay nada que retornar no retorna nada :)
-        return clientes;
     }
 
     //Agregar cuenta
     @Override
-    public ArrayList<Cliente> agregarCuenta(Scanner entrada, String nombre, long numeroTelefono){
+    public void agregarCuenta(Scanner entrada, String nombre, long numeroTelefono){
         try{
             for(Cliente c: clientes){
                 if(c.getNombre().equals(nombre)){
@@ -130,8 +127,6 @@ public class Empresa implements IEmpresa {
                             c.setCuentaCliente(cuentaPostpago);
                             valido = true;
                         }
-
-                        return clientes;
                     }while(!valido);
                 }
             }
@@ -140,6 +135,5 @@ public class Empresa implements IEmpresa {
         } catch (Exception e){ //Excepcion genérica en caso de fallo
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }
