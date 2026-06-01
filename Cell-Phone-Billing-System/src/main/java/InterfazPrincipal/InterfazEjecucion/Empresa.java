@@ -1,10 +1,13 @@
 package InterfazPrincipal.InterfazEjecucion;
 
+import InterfazPrincipal.Excepciones.ClienteNoEncontradoException;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 
 public class Empresa implements IEmpresa {
     private String nombre;
@@ -27,11 +30,12 @@ public class Empresa implements IEmpresa {
     public void setClientes(ArrayList<Cliente> clientes) {
         this.clientes = clientes;
     }
-    //Metodo para poder hacer la lectura de los archivos
 
+
+    //Metodo para poder hacer la lectura de los archivos
     @Override
     public ArrayList<Cliente> lecturaClientes(String nombreArchivo) {
-        //Lectura de las primeras dos lineas del archivo de texto las cuales no presentan ninguna útilidad
+        //Lectura de las primeras dos líneas del archivo de texto las cuales no presentan ninguna útilidad
         //El hash lo uso para sacar repetidos de una vez
         HashSet<Cliente> hashClientes = new HashSet<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(nombreArchivo))){
@@ -58,29 +62,84 @@ public class Empresa implements IEmpresa {
         } //Aquí podemos hacer la implementación de errores
 
         //Pasamos los datos a un arraylist para luego ordenarlos
-        ArrayList<Cliente> listaClientes = new ArrayList<>(hashClientes);
+        ArrayList<Cliente> clientes = new ArrayList<>(hashClientes);
 
         //Ordenamiento burbuja de una vez para mostrar los clientes luego
         /*Esto inicialmente lo iba a hacer con un for each pero no pude lol*/
 
-        int n = listaClientes.size(); //Cantidad de clientes
+        int n = clientes.size(); //Cantidad de clientes
         //Ordenamiento bubuja
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                String c1 = listaClientes.get(j).getIdentificacion();
-                String c2 = listaClientes.get(j + 1).getIdentificacion();
+                String c1 = clientes.get(j).getIdentificacion();
+                String c2 = clientes.get(j + 1).getIdentificacion();
 
                 // Comparamos cadenas (puedes usar Long.parseLong si son puramente numéricas)
                 if (c1.compareTo(c2) > 0) {
                     // Intercambio (Swap)
-                    Cliente temp = listaClientes.get(j);
-                    listaClientes.set(j, listaClientes.get(j + 1));
-                    listaClientes.set(j + 1, temp);
+                    Cliente temp = clientes.get(j);
+                    clientes.set(j, clientes.get(j + 1));
+                    clientes.set(j + 1, temp);
                 }
             }
         }
 
         //De igual manera si no hay nada que retornar no retorna nada :)
-        return listaClientes;
+        return clientes;
+    }
+
+    //Agregar cuenta
+    @Override
+    public ArrayList<Cliente> agregarCuenta(Scanner entrada, String nombre, long numeroTelefono){
+        try{
+            for(Cliente c: clientes){
+                if(c.getNombre().equals(nombre)){
+                    System.out.println("Seleccione el tipo de cuenta: \n\t1. Prepago \n\t2. Postpago");
+                    Integer tipo = entrada.nextInt();
+                    entrada.nextLine(); //Limpieza buffer
+                    //validamos la competencia del usuario con un validador
+                    Boolean valido = false;
+                    do{
+                        if(tipo.equals(1)){
+                            System.out.println("---PREPAGO---");
+                            Prepago cuentaPrepago = new Prepago();
+                            long id = cuentaPrepago.getId();
+
+                            //Llenado de los datos para la cuenta
+                            cuentaPrepago.setId(id);
+                            cuentaPrepago.setNumero(numeroTelefono);
+                            cuentaPrepago.setLlamadasCliente(null);
+                            cuentaPrepago.setNumeroMinutos(5);
+                            cuentaPrepago.setRecargas(null);
+
+                            c.setCuentaCliente(cuentaPrepago);
+                            valido = true;
+                        }
+
+                        if(tipo.equals(2)){
+                            System.out.println("---POSTPAGO---");
+                            Postpago cuentaPostpago = new Postpago();
+                            long id = cuentaPostpago.getId();
+
+                            //Llenado de los datos para la cuenta
+                            cuentaPostpago.setCargoFijo(20000);
+                            cuentaPostpago.setId(id);
+                            cuentaPostpago.setNumero(numeroTelefono);
+                            cuentaPostpago.setLlamadasCliente(null); //no hay, es nueva lol
+
+                            c.setCuentaCliente(cuentaPostpago);
+                            valido = true;
+                        }
+
+                        return clientes;
+                    }while(!valido);
+                }
+            }
+        } catch (ClienteNoEncontradoException e){
+            System.out.println(e.getMessage());
+        } catch (Exception e){ //Excepcion genérica en caso de fallo
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }

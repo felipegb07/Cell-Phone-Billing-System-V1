@@ -43,21 +43,20 @@ public class TestConsola{
                             System.out.println("Procesando archivo...");
 
                             lecturaDatos(entrada, miEmpresa);
-                        } else if (subOpcion == 9) {
+                        } else if (subOpcion == 9) { //Esto siempre será verdadero lol
                             retorno = true;
                         }
                     }while (!retorno);
+                    salirAMenu = true;
                     break;
                 case 2:
                     System.out.println("---AGREGAR NUEVA CUENTA PREPAGO O POSTPAGO---");
-                    System.out.println("Ingrese su cuenta: \n\t1. Prepago \n\t 2. Postpago \n\tOpción: ");
-                    String tipoCuenta = entrada.nextLine();
-                    if(tipoCuenta.equals("1")){
-
-                    }
+                    agregarCuenta(entrada, miEmpresa);
+                    salirAMenu =true;
                     break;
                 case 3:
                     System.out.println("---AGREGAR NUEVA LLAMADA NACIONAL O INTERNACIONAL---");
+
                     break;
 
                 case 4:
@@ -82,9 +81,9 @@ public class TestConsola{
 
                 case 9:
                     System.out.println("---SALIDA DEL MENU---");
-                    salirAMenu = true;
+                    salirAMenu = false;
             }
-        }while(!salirAMenu);
+        }while(salirAMenu);
     }
 
     /*Funciones para evitar la saturación del menú*/
@@ -98,8 +97,14 @@ public class TestConsola{
     }
 
     //Creación de una cuenta prepago o postpago
-    public static void busquedaCliente(Scanner entrada, IEmpresa miEmpresa){
-        System.out.println("Ingrese el nombe del cliente");
+    public static void agregarCuenta(Scanner entrada, IEmpresa miEmpresa){
+        System.out.println("Ingrese el nombe del cliente y el número de manera consecutiva");
         String nombreCliente = entrada.nextLine();
+        long numeroTelefono = entrada.nextInt();
+        entrada.nextLine();
+        miEmpresa.agregarCuenta(entrada, nombreCliente, numeroTelefono);
     }
+
+    //Registro de una llamada
+    public static void
 }

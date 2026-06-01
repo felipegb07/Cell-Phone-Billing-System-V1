@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 public class Utils {
     //Métodos estaticos útilitarios públicos que se pueden usar de manera general en todas las clases
-    private static long CONSECUTIVO;
+    public static long CONSECUTIVO = 1;
 
     //Lectura de datos
 }
