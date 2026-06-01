@@ -1,6 +1,6 @@
 package InterfazPrincipal.InterfazEjecucion;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 /*Bueno de momento tengo entendido que acá se hace la muestra
 * de los servicios que ofrece la empresa creería yo
@@ -8,7 +8,7 @@ import java.util.HashSet;
 * comentarios para el que se digne a leer esto*/
 
 public interface IEmpresa {
-    HashSet getClientes();
+    ArrayList getClientes();
 
-    HashSet<Cliente> lecturaClientes(String nombreArchivo);
+    ArrayList<Cliente> lecturaClientes(String nombreArchivo);
 }
