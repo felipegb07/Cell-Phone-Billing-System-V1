@@ -1,6 +1,11 @@
 package InterfazPrincipal.InterfazEjecucion;
 
-public class Cliente {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Cliente implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String direccion;
     private String identificacion;
     private String nombre;
@@ -14,6 +19,19 @@ public class Cliente {
         this.nombre = nombre;
         this.identificacion = identificacion;
         this.direccion = direccion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cliente cliente = (Cliente) o;
+        return Objects.equals(identificacion, cliente.identificacion);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identificacion);
     }
 
     public Cliente(String direccion, String identificacion, String nombre, String tipoId, Cuenta cuentaCliente) {

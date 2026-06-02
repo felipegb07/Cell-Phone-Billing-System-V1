@@ -1,12 +1,16 @@
 package InterfazPrincipal.InterfazEjecucion;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Recarga {
+public class Recarga implements Serializable {
+    private static final long serialVersionUID = 1L;
     private LocalDate fecha;
     private long valor;
 
     /*Constructor*/
+    public Recarga(){}
+
     public Recarga(LocalDate fecha, long valor) {
         this.fecha = fecha;
         this.valor = valor;

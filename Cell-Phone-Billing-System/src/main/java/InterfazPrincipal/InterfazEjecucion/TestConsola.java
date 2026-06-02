@@ -15,157 +15,171 @@ import java.util.Scanner;
  *
  */
 public class TestConsola implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public static void main(String[] args){
         Scanner entrada = new Scanner(System.in);
-        Boolean salirAMenu = false;
+        boolean continuar = true;
         Utils modDeUtilidades = new Utils();
+        IEmpresa miEmpresa = new Empresa();
+        ManejoArchivos archivosGenerales = new ManejoArchivos();
         do {
+            System.out.println("\n=============================================");
             System.out.println("Ingrese la opción que se quiere implementar");
             System.out.println("1. Ingresar clientes.\n" +
                     "2. Agregar nueva cuenta prepago o postapago.\n" +
                     "3. Agregar una nueva llamada nacional o internacional\n" +
-                    "4. Agregar una recarga (Solo cuentas postpago)\n" +
+                    "4. Agregar una recarga (Solo cuentas prepago)\n" +
                     "5. Reporte de facturación postpago a fin de mes.\n" +
                     "6. Reporte de recargas a fin de mes.\n" +
                     "7. Guardar la empresa en un archivo como un objeto\n" +
                     "8. Cargar un archivo en el objeto empresa\n" +
-                    "9. Salir" +
-                    "Opción: ");
+                    "9. Salir\n" +
+                    "=============================================");
+            System.out.print("Opción: ");
             int opcion = entrada.nextInt();
-            entrada.nextLine();
-            Boolean retorno = false;
-            IEmpresa miEmpresa = new Empresa();
-            entrada.nextLine();
-
+            entrada.nextLine(); // limpiar buffer
+            boolean retorno = false;
 
             switch (opcion) {
                 case 1:
                     do {
-                        System.out.println("--- CARGAR CLIENTES ---");
+                        System.out.println("\n--- CARGAR CLIENTES ---");
                         System.out.println("1. Seleccionar archivo de clientes");
                         System.out.println("9. Regresar al menú principal");
                         System.out.print("Seleccione una opción: ");
                         int subOpcion = entrada.nextInt();
+                        entrada.nextLine(); // limpiar buffer
 
-                        //Podemos hacer la implementación de una excepción aquí
                         if (subOpcion == 1) {
-                            //Hacemos la lecura de los datos desde una función implementada abajo
                             System.out.println("Procesando archivo...");
-
                             lecturaDatos(entrada, miEmpresa);
-                        } else if (subOpcion == 9) { //Esto siempre será verdadero lol
+                        } else if (subOpcion == 9) {
                             retorno = true;
                         }
-                    }while (!retorno);
-                    salirAMenu = true;
+                    } while (!retorno);
                     break;
+
                 case 2:
-                    System.out.println("---AGREGAR NUEVA CUENTA PREPAGO O POSTPAGO---");
+                    System.out.println("\n---AGREGAR NUEVA CUENTA PREPAGO O POSTPAGO---");
                     agregarCuenta(entrada, miEmpresa);
-                    salirAMenu =true;
                     break;
+
                 case 3:
-                    System.out.println("---AGREGAR NUEVA LLAMADA NACIONAL O INTERNACIONAL---");
+                    System.out.println("\n---AGREGAR NUEVA LLAMADA NACIONAL O INTERNACIONAL---");
                     registrarLlamada(entrada, miEmpresa, modDeUtilidades);
                     break;
 
                 case 4:
-                    System.out.println("---AGREGAR UNA RECARGA---");
-                    System.out.println("Ingrese su numero de telefono");
-                    long numeroTelefono = entrada.nextInt();
-                    entrada.nextLine(); //limpiamos el buffer
+                    System.out.println("\n---AGREGAR UNA RECARGA---");
+                    System.out.println("Ingrese su numero de telefono:");
+                    long numeroTelefono = entrada.nextLong();
+                    entrada.nextLine(); // limpiar buffer
                     agregarRecarga(entrada, numeroTelefono, miEmpresa, modDeUtilidades);
-
-                    salirAMenu = true;
                     break;
 
                 case 5:
-                    System.out.println("---REPORTE DE FACTURACION POSTPAGO A FIN DE MES---");
-                    entrada.nextLine(); //limpieza del buffer
-
-                    salirAMenu = true;
+                    System.out.println("\n---REPORTE DE FACTURACION POSTPAGO A FIN DE MES---");
+                    reporteFacturacionPostpago(miEmpresa, modDeUtilidades);
                     break;
 
                 case 6:
-                    System.out.println("---REPORTE DE RECARGAS A FIN DE MES---");
+                    System.out.println("\n---REPORTE DE RECARGAS A FIN DE MES---");
                     reporteRecargasGenerales(miEmpresa, modDeUtilidades);
-                    salirAMenu = true;
                     break;
 
                 case 7:
-                    System.out.println("---GUARDAR EMPRESA EN UN ARCHIVO COMO OBJETO---");
+                    System.out.println("\n---GUARDAR EMPRESA EN UN ARCHIVO COMO OBJETO---");
                     System.out.println("Ingrese la ruta del archivo: ");
                     String archivo = entrada.nextLine();
-                    serializarDatosEnSistema(miEmpresa, archivo);
+                    archivosGenerales.serializarDatosEnSistema(miEmpresa, archivo);
                     break;
 
                 case 8:
-                    System.out.println("---CARGA DE UN ARFCHIVO EL OBJETO EMPRESA---");
+                    System.out.println("\n---CARGA DE UN ARCHIVO EL OBJETO EMPRESA---");
+                    System.out.println("Ingrese el archivo de donde quiere cargar los datos: ");
+                    String nombre = entrada.nextLine();
+                    IEmpresa cargada = archivosGenerales.cargarDatosDelSistema(miEmpresa, nombre);
+                    if (cargada != null) {
+                        miEmpresa = cargada;
+                        System.out.println("Empresa cargada correctamente.");
+                    } else {
+                        System.out.println("Error: No se pudo cargar la empresa.");
+                    }
                     break;
 
                 case 9:
                     System.out.println("---SALIDA DEL MENU---");
-                    salirAMenu = false;
+                    continuar = false;
+                    break;
+                
+                default:
+                    System.out.println("Opción inválida.");
+                    break;
             }
-        }while(salirAMenu);
+        } while(continuar);
     }
 
     /*Funciones para evitar la saturación del menú*/
     //Lectura de los datos
     public static void lecturaDatos(Scanner entrada, IEmpresa miEmpresa){
         System.out.println("Ingrese el nombre del archivo donde quiere hacer la lectura: ");
-        String archivoLectura = new String();
-        archivoLectura = entrada.nextLine();
-        //Lectura de clientes
+        String archivoLectura = entrada.nextLine();
         miEmpresa.lecturaClientes(archivoLectura);
     }
 
     //Creación de una cuenta prepago o postpago
     public static void agregarCuenta(Scanner entrada, IEmpresa miEmpresa){
-        System.out.println("Ingrese el nombe del cliente y el número de manera consecutiva");
+        System.out.println("Ingrese el nombre del cliente:");
         String nombreCliente = entrada.nextLine();
-        long numeroTelefono = entrada.nextInt();
-        entrada.nextLine();
+        System.out.println("Ingrese el número de teléfono:");
+        long numeroTelefono = entrada.nextLong();
+        entrada.nextLine(); // limpiar buffer
         miEmpresa.agregarCuenta(entrada, nombreCliente, numeroTelefono);
     }
 
-    //Falta por terminar
+    //Registro de llamada delegando a la empresa
     public static void registrarLlamada(Scanner entrada, IEmpresa miEmpresa, Utils modDeUtilidades){
-        System.out.println("Ingrese su numero de telefono: ");
-        long numero = entrada.nextInt();
-        entrada.nextLine(); //Limpiar buffer
-        //Identificamos el tipo de cuenta
-
+        miEmpresa.registrarLlamada(entrada, (Empresa) miEmpresa, modDeUtilidades);
     }
 
+    //Agregar recarga
     public static void agregarRecarga(Scanner entrada, long numeroTelefono, IEmpresa miEmpresa, Utils modDeUtilidades){
          try {
              Prepago cuentaPrepago = modDeUtilidades.buscarCuentaPrepago(numeroTelefono, miEmpresa);
              if(cuentaPrepago != null){
-                 //Datos para la recarga
                  System.out.println("Indique la fecha de la recarga en este formato AAAA-MM-DD: ");
                  String fecha = entrada.nextLine();
                  LocalDate fechaRecarga = LocalDate.parse(fecha);
 
                  System.out.println("Indique el valor de la recarga: ");
-                 long valor = entrada.nextInt();
-                 entrada.nextLine();
+                 long valor = entrada.nextLong();
+                 entrada.nextLine(); // limpiar buffer
                  Recarga recargaUsuario = new Recarga(fechaRecarga, valor);
-                 System.out.println("Recarga realizada");
 
-                 ArrayList<Recarga> recargas = new ArrayList<Recarga>();
-                 recargas.add(recargaUsuario);
+                 if (cuentaPrepago.getRecargas() == null) {
+                     cuentaPrepago.setRecargas(new ArrayList<>());
+                 }
+                 cuentaPrepago.getRecargas().add(recargaUsuario);
+
+                 // Se adicionan minutos a una tasa de $100 por minuto (por ejemplo)
+                 long minutosAdicionales = valor / 100;
+                 cuentaPrepago.setNumeroMinutos(cuentaPrepago.getNumeroMinutos() + minutosAdicionales);
+
+                 System.out.println("Recarga realizada exitosamente.");
+                 System.out.println("Se adicionaron " + minutosAdicionales + " minutos. Minutos totales: " + cuentaPrepago.getNumeroMinutos());
+             } else {
+                 throw new CuentaNoEncontradaException("Cuenta no encontrada...");
              }
          } catch (CuentaNoEncontradaException e){
              System.out.println(e.getMessage());
          } catch (Exception e){
-             System.out.println(e.getMessage());
+             System.out.println("Error al realizar la recarga: " + e.getMessage());
          }
     }
 
-    //Por finalizar
+    //Reporte de recargas para cuentas Prepago
     public static void reporteRecargasGenerales(IEmpresa miEmpresa, Utils modDeUtilidades) {
-        // 1. Obtenemos todas las cuentas prepago de la empresa
         ArrayList<Prepago> todasLasCuentas = modDeUtilidades.buscarTodasLasCuentasPrepago(miEmpresa);
 
         if (todasLasCuentas.isEmpty()) {
@@ -174,38 +188,50 @@ public class TestConsola implements Serializable {
         }
 
         for (Prepago cuenta : todasLasCuentas) {
-            System.out.println("\nNumero cuenta: " + cuenta.getNumero());
-
+            System.out.println("\nNúmero cuenta: " + cuenta.getNumero() + " | Minutos actuales: " + cuenta.getNumeroMinutos());
             ArrayList<Recarga> recargasUsuario = cuenta.getRecargas();
 
-            if (recargasUsuario.isEmpty()) {
-                System.out.println("Sin recargas registradas.");
+            if (recargasUsuario == null || recargasUsuario.isEmpty()) {
+                System.out.println("  Sin recargas registradas.");
             } else {
                 for (Recarga r : recargasUsuario) {
-                    System.out.println("Fecha: " + r.getFecha() + "Valor: " + r.getValor());
+                    System.out.println("  - Fecha: " + r.getFecha() + " | Valor: $" + r.getValor());
                 }
             }
         }
     }
 
-    public static void serializarDatosEnSistema(IEmpresa miEmpresa, String archivo){
-        System.out.println("Ingrese la ruta del archivo: ");
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
-            oos.writeObject(miEmpresa);
-            System.out.println("Objeto Empresa serializado correctamente en " + archivo);
-        } catch (IOException e) {
-            System.out.println("Error al serializar: " + e.getMessage());
+    //Reporte de facturación para cuentas Postpago
+    public static void reporteFacturacionPostpago(IEmpresa miEmpresa, Utils modDeUtilidades) {
+        ArrayList<Cliente> listaClientes = miEmpresa.getClientes();
+        if (listaClientes == null || listaClientes.isEmpty()) {
+            System.out.println("No hay clientes registrados.");
+            return;
         }
-    }
 
-    public static IEmpresa cargarDatosDelSistema(IEmpresa miEmpresa, String archivo){
-        miEmpresa = null; //eliminamos todo lol
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-            return (IEmpresa) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error al deserializar: " + e.getMessage());
-            return null;
+        boolean hayPostpago = false;
+        for (Cliente c : listaClientes) {
+            Cuenta cuenta = c.getCuentaCliente();
+            if (cuenta instanceof Postpago) {
+                hayPostpago = true;
+                Postpago post = (Postpago) cuenta;
+                long totalFactura = post.obtenerPagoCuenta();
+                System.out.println("\nCliente: " + c.getNombre() + " (Cédula: " + c.getIdentificacion() + ")");
+                System.out.println("  Número cuenta: " + post.getNumero());
+                System.out.println("  Cargo fijo: $" + post.getCargoFijo());
+                System.out.println("  Llamadas realizadas:");
+                if (post.getLlamadasCliente() == null || post.getLlamadasCliente().isEmpty()) {
+                    System.out.println("    Sin llamadas registradas.");
+                } else {
+                    for (Llamada l : post.getLlamadasCliente()) {
+                        System.out.println("    - Destino: " + l.getTelefonoDestino() + " | Fecha: " + l.getFecha() + " | Duración: " + l.getDuracion() + " min | Valor: $" + l.getValor());
+                    }
+                }
+                System.out.println("  TOTAL A PAGAR: $" + totalFactura);
+            }
+        }
+        if (!hayPostpago) {
+            System.out.println("No hay cuentas Postpago registradas.");
         }
     }
-    //Registro de una llamada
 }

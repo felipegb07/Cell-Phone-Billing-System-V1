@@ -1,8 +1,10 @@
 package InterfazPrincipal.InterfazEjecucion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Prepago extends Cuenta {
+public class Prepago extends Cuenta implements Serializable {
+    private static final long serialVersionUID = 1L;
     private long numeroMinutos;
     private ArrayList<Recarga> recargas;
 

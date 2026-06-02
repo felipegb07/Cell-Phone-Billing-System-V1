@@ -1,15 +1,19 @@
 package InterfazPrincipal.InterfazEjecucion;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public abstract class Llamada {
+public abstract class Llamada implements Serializable {
+    private static final long serialVersionUID = 1L;
     private long duracion;
     private LocalDate fecha;
-    private long telefonoDestino;
+    private String telefonoDestino;
     private long valor;
 
     /*Constructor*/
-    public Llamada(long duracion, LocalDate fecha, long telefonoDestino, long valor) {
+    public Llamada(){}
+
+    public Llamada(long duracion, LocalDate fecha, String telefonoDestino, long valor) {
         this.duracion = duracion;
         this.fecha = fecha;
         this.telefonoDestino = telefonoDestino;
@@ -33,11 +37,11 @@ public abstract class Llamada {
         this.fecha = fecha;
     }
 
-    public long getTelefonoDestino() {
+    public String getTelefonoDestino() {
         return telefonoDestino;
     }
 
-    public void setTelefonoDestino(long telefonoDestino) {
+    public void setTelefonoDestino(String telefonoDestino) {
         this.telefonoDestino = telefonoDestino;
     }
 

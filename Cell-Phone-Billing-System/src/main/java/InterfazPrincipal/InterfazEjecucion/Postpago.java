@@ -1,8 +1,10 @@
 package InterfazPrincipal.InterfazEjecucion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Postpago extends Cuenta{
+public class Postpago extends Cuenta implements Serializable {
+    private static final long serialVersionUID = 1L;
     private long cargoFijo;
 
     /*Constructor*/
@@ -26,7 +28,12 @@ public class Postpago extends Cuenta{
     /*Metodo*/
     @Override
     public long obtenerPagoCuenta(){
-
-        return 1;
+        long total = cargoFijo;
+        if (getLlamadasCliente() != null) {
+            for (Llamada l : getLlamadasCliente()) {
+                total += l.getValor();
+            }
+        }
+        return total;
     }
 }

@@ -1,8 +1,10 @@
 package InterfazPrincipal.InterfazEjecucion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Cuenta {
+public abstract class Cuenta implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String tipoCuenta;
     private long id;
     private long numero;

@@ -1,9 +1,7 @@
 package InterfazPrincipal.InterfazEjecucion;
 
 import InterfazPrincipal.ENUMS.Paises;
-import jdk.vm.ci.meta.Local;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -14,13 +12,13 @@ public class Utils {
     public String buscarPais(String nombre){
         for(Paises p : Paises.values()){
             if(p.getNombre().equalsIgnoreCase(nombre)){
-                return p.getExtensionTelefonica();
+                return p.name();
             }
         }
         return null;
     }
 
-    public LocalDateTime modificaFecha(LocalDateTime fechaLlamada, int años, int meses, int dias, int horas, int minutos, int segundos){
+    public LocalDateTime modificaFecha(LocalDateTime fechaLlamada, long años, long meses, long dias, long horas, long minutos, long segundos){
         fechaLlamada.plusYears(años).plusMonths(meses).plusDays(dias).plusMinutes(minutos).plusSeconds(segundos);
         return fechaLlamada;
     }

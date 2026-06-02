@@ -1,18 +1,20 @@
 package InterfazPrincipal.InterfazEjecucion;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class LlamadaNacional extends Llamada{
-    /*No hay atributos presentes en esta clase*/
+public class LlamadaNacional extends Llamada implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    /*Implementación del constructor*/
-    public LlamadaNacional(long duracion, LocalDate fecha, long telefonoDestino, long valor) {
+    public LlamadaNacional(){}
+
+    public LlamadaNacional(long duracion, LocalDate fecha, String telefonoDestino, long valor) {
         super(duracion, fecha, telefonoDestino, valor);
     }
 
     /*Meotodo*/
-    public long calcularValor(){
-
-        return 1;
+    public long calcularValor(long duracion, long valor){
+        valor *= duracion;
+        return valor;
     }
 }
