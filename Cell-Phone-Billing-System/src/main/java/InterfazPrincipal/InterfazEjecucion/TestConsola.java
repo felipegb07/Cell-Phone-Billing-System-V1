@@ -3,9 +3,8 @@ package InterfazPrincipal.InterfazEjecucion;
 import InterfazPrincipal.ENUMS.Paises;
 import InterfazPrincipal.Excepciones.CuentaNoEncontradaException;
 import InterfazPrincipal.Excepciones.PaisNoEncontradoException;
-import com.sun.tools.jdeprscan.scan.Scan;
-import jdk.internal.org.jline.utils.OSUtils;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.Scanner;
  * Hello world!
  *
  */
-public class TestConsola{
+public class TestConsola implements Serializable {
     public static void main(String[] args){
         Scanner entrada = new Scanner(System.in);
         Boolean salirAMenu = false;
@@ -95,6 +94,9 @@ public class TestConsola{
 
                 case 7:
                     System.out.println("---GUARDAR EMPRESA EN UN ARCHIVO COMO OBJETO---");
+                    System.out.println("Ingrese la ruta del archivo: ");
+                    String archivo = entrada.nextLine();
+                    serializarDatosEnSistema(miEmpresa, archivo);
                     break;
 
                 case 8:
@@ -127,6 +129,7 @@ public class TestConsola{
         miEmpresa.agregarCuenta(entrada, nombreCliente, numeroTelefono);
     }
 
+    //Falta por terminar
     public static void registrarLlamada(Scanner entrada, IEmpresa miEmpresa, Utils modDeUtilidades){
         System.out.println("Ingrese su numero de telefono: ");
         long numero = entrada.nextInt();
@@ -182,6 +185,26 @@ public class TestConsola{
                     System.out.println("Fecha: " + r.getFecha() + "Valor: " + r.getValor());
                 }
             }
+        }
+    }
+
+    public static void serializarDatosEnSistema(IEmpresa miEmpresa, String archivo){
+        System.out.println("Ingrese la ruta del archivo: ");
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
+            oos.writeObject(miEmpresa);
+            System.out.println("Objeto Empresa serializado correctamente en " + archivo);
+        } catch (IOException e) {
+            System.out.println("Error al serializar: " + e.getMessage());
+        }
+    }
+
+    public static IEmpresa cargarDatosDelSistema(IEmpresa miEmpresa, String archivo){
+        miEmpresa = null; //eliminamos todo lol
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
+            return (IEmpresa) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error al deserializar: " + e.getMessage());
+            return null;
         }
     }
     //Registro de una llamada
