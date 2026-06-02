@@ -11,8 +11,8 @@ public class Prepago extends Cuenta {
     public Prepago(){}
 
     /*Lleno*/
-    public Prepago(long id, long numero, ArrayList<Llamada> llamadasCliente, long numeroMinutos, ArrayList<Recarga> recargas) {
-        super(id, numero, llamadasCliente);
+    public Prepago(long id, long numero, ArrayList<Llamada> llamadasCliente, long numeroMinutos, ArrayList<Recarga> recargas, String tipoCuenta) {
+        super(id, numero, llamadasCliente, tipoCuenta);
         this.numeroMinutos = numeroMinutos;
         this.recargas = recargas;
     }

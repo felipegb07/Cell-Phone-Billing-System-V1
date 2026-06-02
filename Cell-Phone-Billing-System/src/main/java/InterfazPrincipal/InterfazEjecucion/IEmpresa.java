@@ -13,5 +13,5 @@ public interface IEmpresa {
 
     void lecturaClientes(String nombreArchivo);
     void agregarCuenta(Scanner entrada, String nombreCliente, long numeroTelefono);
-
+    void registrarLlamada(Scanner entrada, Empresa miEmpresa, Utils modDeUtilidades);
 }

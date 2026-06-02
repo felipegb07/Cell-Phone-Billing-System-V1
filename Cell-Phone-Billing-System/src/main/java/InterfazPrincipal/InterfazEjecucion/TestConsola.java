@@ -1,8 +1,14 @@
 package InterfazPrincipal.InterfazEjecucion;
 
 import InterfazPrincipal.ENUMS.Paises;
+import InterfazPrincipal.Excepciones.CuentaNoEncontradaException;
 import InterfazPrincipal.Excepciones.PaisNoEncontradoException;
+import com.sun.tools.jdeprscan.scan.Scan;
+import jdk.internal.org.jline.utils.OSUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -19,7 +25,7 @@ public class TestConsola{
             System.out.println("1. Ingresar clientes.\n" +
                     "2. Agregar nueva cuenta prepago o postapago.\n" +
                     "3. Agregar una nueva llamada nacional o internacional\n" +
-                    "4. Agregar una recarga\n" +
+                    "4. Agregar una recarga (Solo cuentas postpago)\n" +
                     "5. Reporte de facturación postpago a fin de mes.\n" +
                     "6. Reporte de recargas a fin de mes.\n" +
                     "7. Guardar la empresa en un archivo como un objeto\n" +
@@ -61,20 +67,30 @@ public class TestConsola{
                     break;
                 case 3:
                     System.out.println("---AGREGAR NUEVA LLAMADA NACIONAL O INTERNACIONAL---");
-
+                    registrarLlamada(entrada, miEmpresa, modDeUtilidades);
                     break;
 
                 case 4:
                     System.out.println("---AGREGAR UNA RECARGA---");
+                    System.out.println("Ingrese su numero de telefono");
+                    long numeroTelefono = entrada.nextInt();
+                    entrada.nextLine(); //limpiamos el buffer
+                    agregarRecarga(entrada, numeroTelefono, miEmpresa, modDeUtilidades);
 
+                    salirAMenu = true;
                     break;
 
                 case 5:
                     System.out.println("---REPORTE DE FACTURACION POSTPAGO A FIN DE MES---");
+                    entrada.nextLine(); //limpieza del buffer
+
+                    salirAMenu = true;
                     break;
 
                 case 6:
                     System.out.println("---REPORTE DE RECARGAS A FIN DE MES---");
+                    reporteRecargasGenerales(miEmpresa, modDeUtilidades);
+                    salirAMenu = true;
                     break;
 
                 case 7:
@@ -115,31 +131,58 @@ public class TestConsola{
         System.out.println("Ingrese su numero de telefono: ");
         long numero = entrada.nextInt();
         entrada.nextLine(); //Limpiar buffer
+        //Identificamos el tipo de cuenta
 
-        System.out.println("Ingrese el tipo de llamada \n\t1. Nacional\n\t2. Internacional");
-        Integer tipo = entrada.nextInt();
-        while(!tipo.equals(1) && !tipo.equals(2)){
-            System.out.println("Ingrese el tipo de llamada \n\t1. Nacional\n\t2. Internacional");
-            tipo = entrada.nextInt();
-        }
-
-        if(tipo.equals(2)){
-            System.out.println("---LLAMADA INTERNACIONAL---");
-            System.out.println("Ingrese el nombre del pais de destino");
-            try {
-                String nombre = entrada.nextLine();
-                modDeUtilidades.buscarPais(nombre);
-            } catch (PaisNoEncontradoException e){
-                System.out.println(e.getMessage());
-            } catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-
-        if(tipo.equals(1)){
-            System.out.println("---LLAMADA NACIONAL---");
-        }
     }
 
+    public static void agregarRecarga(Scanner entrada, long numeroTelefono, IEmpresa miEmpresa, Utils modDeUtilidades){
+         try {
+             Prepago cuentaPrepago = modDeUtilidades.buscarCuentaPrepago(numeroTelefono, miEmpresa);
+             if(cuentaPrepago != null){
+                 //Datos para la recarga
+                 System.out.println("Indique la fecha de la recarga en este formato AAAA-MM-DD: ");
+                 String fecha = entrada.nextLine();
+                 LocalDate fechaRecarga = LocalDate.parse(fecha);
+
+                 System.out.println("Indique el valor de la recarga: ");
+                 long valor = entrada.nextInt();
+                 entrada.nextLine();
+                 Recarga recargaUsuario = new Recarga(fechaRecarga, valor);
+                 System.out.println("Recarga realizada");
+
+                 ArrayList<Recarga> recargas = new ArrayList<Recarga>();
+                 recargas.add(recargaUsuario);
+             }
+         } catch (CuentaNoEncontradaException e){
+             System.out.println(e.getMessage());
+         } catch (Exception e){
+             System.out.println(e.getMessage());
+         }
+    }
+
+    //Por finalizar
+    public static void reporteRecargasGenerales(IEmpresa miEmpresa, Utils modDeUtilidades) {
+        // 1. Obtenemos todas las cuentas prepago de la empresa
+        ArrayList<Prepago> todasLasCuentas = modDeUtilidades.buscarTodasLasCuentasPrepago(miEmpresa);
+
+        if (todasLasCuentas.isEmpty()) {
+            System.out.println("No hay cuentas Prepago registradas en la empresa.");
+            return;
+        }
+
+        for (Prepago cuenta : todasLasCuentas) {
+            System.out.println("\nNumero cuenta: " + cuenta.getNumero());
+
+            ArrayList<Recarga> recargasUsuario = cuenta.getRecargas();
+
+            if (recargasUsuario.isEmpty()) {
+                System.out.println("Sin recargas registradas.");
+            } else {
+                for (Recarga r : recargasUsuario) {
+                    System.out.println("Fecha: " + r.getFecha() + "Valor: " + r.getValor());
+                }
+            }
+        }
+    }
     //Registro de una llamada
 }

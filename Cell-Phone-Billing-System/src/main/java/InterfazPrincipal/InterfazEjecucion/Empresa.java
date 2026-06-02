@@ -1,13 +1,18 @@
 package InterfazPrincipal.InterfazEjecucion;
 
+import InterfazPrincipal.ENUMS.Paises;
 import InterfazPrincipal.Excepciones.ClienteNoEncontradoException;
+import InterfazPrincipal.Excepciones.PaisNoEncontradoException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
+
 
 public class Empresa implements IEmpresa {
     private String nombre;
@@ -108,6 +113,7 @@ public class Empresa implements IEmpresa {
                             cuentaPrepago.setLlamadasCliente(null);
                             cuentaPrepago.setNumeroMinutos(5);
                             cuentaPrepago.setRecargas(null);
+                            cuentaPrepago.setTipoCuenta("prepago");
 
                             c.setCuentaCliente(cuentaPrepago);
                             valido = true;
@@ -123,6 +129,7 @@ public class Empresa implements IEmpresa {
                             cuentaPostpago.setId(id);
                             cuentaPostpago.setNumero(numeroTelefono);
                             cuentaPostpago.setLlamadasCliente(null); //no hay, es nueva lol
+                            cuentaPostpago.setTipoCuenta("postpago");
 
                             c.setCuentaCliente(cuentaPostpago);
                             valido = true;
@@ -134,6 +141,57 @@ public class Empresa implements IEmpresa {
             System.out.println(e.getMessage());
         } catch (Exception e){ //Excepcion genérica en caso de fallo
             System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void registrarLlamada(Scanner entrada, Empresa miEmpresa, Utils modDeUtilidades){
+        System.out.println("Ingrese el tipo de llamada \n\t1. Nacional\n\t2. Internacional");
+        Integer tipo = entrada.nextInt();
+        entrada.nextLine(); //Limpieza del buffer
+        ArrayList<Cliente> arregloClientes =  miEmpresa.getClientes();
+
+        for(Cliente c: arregloClientes){
+            Cuenta cuentaTemporal = c.getCuentaCliente();
+            if(cuentaTemporal.getTipoCuenta().equals("prepago"));
+        }
+
+        while(!tipo.equals(1) && !tipo.equals(2)){
+            System.out.println("Ingrese el tipo de llamada \n\t1. Nacional\n\t2. Internacional");
+            tipo = entrada.nextInt();
+        }
+
+        if(tipo.equals(2)){
+            System.out.println("---LLAMADA INTERNACIONAL---");
+            System.out.println("Ingrese el nombre del pais de destino");
+            try {
+                String nombre = entrada.nextLine();
+
+                Paises paisDestino = Paises.valueOf(modDeUtilidades.buscarPais(nombre)); //Me pidió hacer esto para la asignación del país
+                System.out.println("País válido para llamada: " + paisDestino.getNombre() + "\nExtención: " + paisDestino.getExtensionTelefonica());
+
+                System.out.println("Fecha de la llamada: " + LocalDateTime.now());
+                LocalDateTime fechaLlamada = LocalDateTime.now();
+
+                System.out.println("Ingrese el telefono de destino sin colocar la extención " + paisDestino.getExtensionTelefonica());
+                String telefonoDestino = entrada.nextLine();
+                telefonoDestino.concat(modDeUtilidades.buscarPais(nombre) + "-");
+
+                System.out.println("Ingrese la duración de la llamada en minutos: ");
+                Integer adicion = entrada.nextInt();
+                LocalDateTime duracionLlamada = modDeUtilidades.modificaFecha(fechaLlamada, 0, 0, 0, 0, adicion, 0);
+
+
+            } catch (PaisNoEncontradoException e){
+                System.out.println(e.getMessage());
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+
+        if(tipo.equals(1)){
+            System.out.println("---LLAMADA NACIONAL---");
+            System.out.println("Fecha actual " + LocalDate.now());
         }
     }
 }

@@ -3,6 +3,7 @@ package InterfazPrincipal.InterfazEjecucion;
 import java.util.ArrayList;
 
 public abstract class Cuenta {
+    private String tipoCuenta;
     private long id;
     private long numero;
     private ArrayList<Llamada> llamadasCliente;
@@ -12,10 +13,11 @@ public abstract class Cuenta {
     public Cuenta(){}
 
     /*Constructor lleno*/
-    public Cuenta(long id, long numero, ArrayList<Llamada> llamadasCliente) {
+    public Cuenta(long id, long numero, ArrayList<Llamada> llamadasCliente, String tipoCuenta) {
         this.id = Utils.CONSECUTIVO++;
         this.numero = numero;
         this.llamadasCliente = llamadasCliente;
+        this.tipoCuenta = tipoCuenta;
     }
 
     /*Métodos*/
@@ -49,4 +51,8 @@ public abstract class Cuenta {
     public void setLlamadasCliente(ArrayList<Llamada> llamadasCliente) {
         this.llamadasCliente = llamadasCliente;
     }
+
+    public String getTipoCuenta() {return tipoCuenta;}
+
+    public void setTipoCuenta(String tipoCuenta) { this.tipoCuenta = tipoCuenta; }
 }

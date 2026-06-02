@@ -10,8 +10,8 @@ public class Postpago extends Cuenta{
     public Postpago(){}
 
     /*Lleno*/
-    public Postpago(long id, long numero, ArrayList<Llamada> llamadasCliente, long cargoFijo) {
-        super(id, numero, llamadasCliente);
+    public Postpago(long id, long numero, ArrayList<Llamada> llamadasCliente, long cargoFijo, String tipoCuenta) {
+        super(id, numero, llamadasCliente, tipoCuenta);
         this.cargoFijo = cargoFijo;
     }
 

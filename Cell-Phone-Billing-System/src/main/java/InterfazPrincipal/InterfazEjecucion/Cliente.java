@@ -8,6 +8,7 @@ public class Cliente {
     private Cuenta cuentaCliente;
 
     /*Constructores*/
+    public Cliente(){}
 
     public Cliente(String nombre, String identificacion, String direccion){
         this.nombre = nombre;
