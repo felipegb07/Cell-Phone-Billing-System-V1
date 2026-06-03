@@ -15,7 +15,6 @@ import java.util.Scanner;
  *
  */
 public class TestConsola implements Serializable {
-    private static final long serialVersionUID = 1L;
 
     public static void main(String[] args){
         Scanner entrada = new Scanner(System.in);
@@ -34,8 +33,7 @@ public class TestConsola implements Serializable {
                     "6. Reporte de recargas a fin de mes.\n" +
                     "7. Guardar la empresa en un archivo como un objeto\n" +
                     "8. Cargar un archivo en el objeto empresa\n" +
-                    "9. Salir\n" +
-                    "=============================================");
+                    "9. Salir\n");
             System.out.print("Opción: ");
             int opcion = entrada.nextInt();
             entrada.nextLine(); // limpiar buffer
