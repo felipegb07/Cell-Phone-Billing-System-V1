@@ -138,7 +138,7 @@ public class TestConsola implements Serializable {
 
     //Registro de llamada delegando a la empresa
     public static void registrarLlamada(Scanner entrada, IEmpresa miEmpresa, Utils modDeUtilidades){
-        miEmpresa.registrarLlamada(entrada, (Empresa) miEmpresa, modDeUtilidades);
+        miEmpresa.registrarLlamada(entrada,(Empresa) miEmpresa, modDeUtilidades);
     }
 
     //Agregar recarga

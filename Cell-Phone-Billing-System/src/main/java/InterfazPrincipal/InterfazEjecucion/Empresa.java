@@ -161,7 +161,7 @@ public class Empresa implements IEmpresa, Serializable {
 
     @Override
     public void registrarLlamada(Scanner entrada, Empresa miEmpresa, Utils modDeUtilidades){
-        System.out.println("Ingrese el número de teléfono de origen (su cuenta):");
+        System.out.println("Ingrese el número de su cuenta:");
         long numeroOrigen = entrada.nextLong();
         entrada.nextLine(); // Limpieza del buffer
 
@@ -170,7 +170,7 @@ public class Empresa implements IEmpresa, Serializable {
 
         for(Cliente c : arregloClientes){
             Cuenta cuentaTemporal = c.getCuentaCliente();
-            if(cuentaTemporal != null && cuentaTemporal.getNumero() == numeroOrigen) {
+            if(cuentaTemporal.getNumero() == numeroOrigen) {
                 cuentaOrigen = cuentaTemporal;
                 break; // Ya encontramos la cuenta, salimos del ciclo
             }
