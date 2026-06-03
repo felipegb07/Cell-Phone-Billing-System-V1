@@ -23,7 +23,6 @@ public class TestConsola implements Serializable {
         IEmpresa miEmpresa = new Empresa();
         ManejoArchivos archivosGenerales = new ManejoArchivos();
         do {
-            System.out.println("\n=============================================");
             System.out.println("Ingrese la opción que se quiere implementar");
             System.out.println("1. Ingresar clientes.\n" +
                     "2. Agregar nueva cuenta prepago o postapago.\n" +
